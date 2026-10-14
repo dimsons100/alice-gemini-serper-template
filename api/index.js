@@ -207,7 +207,7 @@ export default async function handler(req, res) {
     }
   }
 
-  if (req.method !== "POST") {
+  if (req.method !== "POST" && !b64req) {
     res.setHeader("Allow", "GET, POST");
     return res.status(405).json({ error: "Method not allowed" });
   }
