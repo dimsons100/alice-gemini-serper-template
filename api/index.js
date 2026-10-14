@@ -191,12 +191,20 @@ function errorForUser(error) {
 }
 
 export default async function handler(req, res) {
-  if (req.method === "GET") {
+  const b64req = req.method === "GET" ? req.query?.req : null;
+  if (req.method === "GET" && !b64req) {
     return res.status(200).json({
       ok: true,
       service: "alice-gemini-serper",
       message: "Webhook is ready. Yandex Dialogs should send POST requests to /api."
     });
+  }
+  if (b64req) {
+    try {
+      req.body = JSON.parse(Buffer.from(String(b64req), "base64url").toString("utf8"));
+    } catch {
+      return res.status(200).json(aliceResponse("Не удалось прочитать запрос. Попробуйте ещё раз.", false, []));
+    }
   }
 
   if (req.method !== "POST") {
