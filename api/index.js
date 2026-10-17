@@ -138,7 +138,7 @@ async function askGemini(text, history, searchContext, timeoutMs) {
         "x-goog-api-key": key
       },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM_PROMPT + " Текущие дата и время: " + new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" }) + " (Москва, UTC+3). Если спросят время или дату — отвечай именно этими данными, не отказывайся." }] },
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT + " Текущие дата и время: " + new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" }) + " (Москва, UTC+3). Если спросят время или дату — отвечай именно этими данными, не отказывайся." }] }, contents,
                 generationConfig: {
           temperature: 0.5,
           maxOutputTokens: 400,
