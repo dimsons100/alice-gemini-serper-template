@@ -46,6 +46,7 @@ function fitAliceText(value) {
 }
 
 function isSearchIntent(text) {
+  if (/(который час|сколько времени|сколько сейчас времени|время сейчас|какое сегодня число|какая сегодня дата|какой сегодня день|какой день недели)/i.test(text)) return false;
   return /\b(latest|today|current|news|weather|price|exchange rate|recent|search|look up)\b|сегодня|сейчас|последн|новост|погод|курс валют|найди|поищи|актуальн|сколько стоит|свежие данные/i.test(text);
 }
 
@@ -139,9 +140,10 @@ async function askGemini(text, history, searchContext, timeoutMs) {
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT + " Текущие дата и время: " + new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" }) + " (Москва, UTC+3). Если спросят время или дату — отвечай именно этими данными, не отказывайся." }] },
         contents,
-        generationConfig: {
+                generationConfig: {
           temperature: 0.5,
-          maxOutputTokens: 240
+          maxOutputTokens: 400,
+          thinkingConfig: { thinkingBudget: 0 }
         }
       })
     },
