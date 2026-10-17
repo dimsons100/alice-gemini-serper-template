@@ -1,10 +1,10 @@
-const DEFAULT_MODEL = "gemini-3.5-flash-lite";
+const DEFAULT_MODEL = "gemini-3.5-flash";
 const MAX_HISTORY_MESSAGES = 8;
 const MAX_HISTORY_MESSAGE_CHARS = 1200;
 const MAX_ALICE_TEXT = 1024;
-const TOTAL_RESPONSE_BUDGET_MS = 4000;
-const SERPER_TIMEOUT_MS = 500;
-const GEMINI_TIMEOUT_MS = 3200;
+const TOTAL_RESPONSE_BUDGET_MS = 4200;
+const SERPER_TIMEOUT_MS = 900;
+const GEMINI_TIMEOUT_MS = 2900;
 
 const SYSTEM_PROMPT = [
   "Ты — полезный голосовой помощник в навыке Яндекс Алисы.",
@@ -137,7 +137,7 @@ async function askGemini(text, history, searchContext, timeoutMs) {
         "x-goog-api-key": key
       },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT + " Текущие дата и время: " + new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" }) + " (Москва, UTC+3). Если спросят время или дату — отвечай именно этими данными, не отказывайся." }] },,
         contents,
         generationConfig: {
           temperature: 0.5,
