@@ -143,6 +143,8 @@ async function askGemini(text, history, searchContext, timeoutMs) {
           temperature: 0.5,
           maxOutputTokens: 400,
           ...(model.includes("lite") ? {} : { thinkingConfig: { thinkingBudget: 0 } })
+        }
+      })
     },
     Math.min(GEMINI_TIMEOUT_MS, timeoutMs)
   );
