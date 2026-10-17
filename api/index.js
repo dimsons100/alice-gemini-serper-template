@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = "gemini-3.5-flash";
+const DEFAULT_MODEL = "gemini-3.5-flash-lite";
 const MAX_HISTORY_MESSAGES = 8;
 const MAX_HISTORY_MESSAGE_CHARS = 1200;
 const MAX_ALICE_TEXT = 1024;
@@ -139,13 +139,10 @@ async function askGemini(text, history, searchContext, timeoutMs) {
       },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT + " Текущие дата и время: " + new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" }) + " (Москва, UTC+3). Если спросят время или дату — отвечай именно этими данными, не отказывайся." }] },
-        contents,
                 generationConfig: {
           temperature: 0.5,
           maxOutputTokens: 400,
-          thinkingConfig: { thinkingBudget: 0 }
-        }
-      })
+          ...(model.includes("lite") ? {} : { thinkingConfig: { thinkingBudget: 0 } })
     },
     Math.min(GEMINI_TIMEOUT_MS, timeoutMs)
   );
